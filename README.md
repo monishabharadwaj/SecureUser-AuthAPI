@@ -45,7 +45,7 @@ This project simulates a real-world authentication and user management system su
 
 The project follows a clean layered structure:
 
-
+```
 src/
 │
 ├── controllers/ # Request handling logic
@@ -56,6 +56,7 @@ src/
 ├── config/ # Database & environment configs
 ├── app.js # Express app configuration
 server.js # Server entry point
+```
 
 
 This separation ensures maintainability, scalability, and testability.
