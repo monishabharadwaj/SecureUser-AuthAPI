@@ -1,124 +1,112 @@
-# 🔐 User Management API (Secure Backend)
+# SecureUser Auth API
 
-A production-style Node.js + Express + MySQL backend application with:
-
-- JWT Authentication
-- Role-Based Access Control (RBAC)
-- Password Hashing
-- Rate Limiting
-- Strong Password Validation
-- Transaction-based MySQL operations
-- Clean layered architecture
+A production-ready RESTful API for user management built with Node.js, Express, and MySQL.  
+Implements secure authentication using JWT access and refresh tokens, role-based access control (RBAC), rate limiting, account lockout protection, and full integration testing.
 
 ---
 
-## 🚀 Features
+## 🚀 Overview
 
-### 🔐 Authentication
-- User Registration
-- Login with JWT
-- Password hashing using bcrypt
-- Strong password policy enforcement
+SecureUser Auth API is designed to demonstrate backend engineering best practices including layered architecture, secure authentication flows, token rotation, protected routes, and automated testing.
 
-### 🛡 Authorization
-- Role-based access control (Admin / User)
-- Protected routes using JWT middleware
+This project simulates a real-world authentication and user management system suitable for scalable applications.
 
-### ⚡ Security Enhancements
-- Rate limiting to prevent brute-force attacks
-- Secure HTTP headers (Helmet)
-- Environment-based configuration
-- Centralized error handling
+---
 
-### 🗄 Database
-- MySQL relational database
-- Transaction-based inserts
-- Foreign key relationships
-- Indexed fields for performance
+## ✨ Features
+
+- JWT Access & Refresh Token Authentication
+- Refresh Token Rotation
+- Secure Logout (Token Invalidation)
+- Role-Based Access Control (RBAC)
+- Strong Password Policy Enforcement
+- Account Lockout After Failed Login Attempts
+- Rate Limiting (Brute Force Protection)
+- Swagger (OpenAPI) Documentation
+- Integration Testing (Jest + Supertest)
+- Clean Layered Architecture
+- MySQL Relational Data Modeling
+
+---
+
+## 🛠 Tech Stack
+
+- **Backend:** Node.js, Express.js  
+- **Database:** MySQL (mysql2)  
+- **Authentication:** JSON Web Tokens (JWT)  
+- **Security:** bcrypt, helmet, express-rate-limit  
+- **Validation:** express-validator  
+- **Testing:** Jest, Supertest  
+- **API Docs:** Swagger (swagger-jsdoc, swagger-ui-express)
 
 ---
 
 ## 🏗 Architecture
 
-Layered architecture:
-
-Routes → Controllers → Services → Models → Database
+The project follows a clean layered structure:
 
 
-- Controllers handle HTTP logic
-- Services contain business logic
-- Models manage data structure
-- Middleware handles authentication & authorization
+src/
+│
+├── controllers/ # Request handling logic
+├── services/ # Business logic & database interaction
+├── routes/ # API route definitions
+├── middleware/ # Auth, role checks, error handling
+├── models/ # Data models
+├── config/ # Database & environment configs
+├── app.js # Express app configuration
+server.js # Server entry point
 
----
 
-## 🧰 Tech Stack
-
-- Node.js
-- Express.js
-- MySQL
-- JWT (jsonwebtoken)
-- bcryptjs
-- express-rate-limit
-- Helmet
-- dotenv
+This separation ensures maintainability, scalability, and testability.
 
 ---
 
 ## 🔐 Authentication Flow
 
-1. User registers → password is hashed
-2. User logs in → JWT token is generated
-3. Protected routes require:
-
-
-Authorization: Bearer <TOKEN>
-
-
-4. Middleware verifies token before allowing access
+1. User registers → password hashed using bcrypt.
+2. User logs in → receives:
+   - Short-lived Access Token
+   - Long-lived Refresh Token
+3. Access Token required for protected routes.
+4. Refresh Token used to generate new Access Tokens.
+5. Logout invalidates stored Refresh Token.
 
 ---
 
-## 📌 API Endpoints
+## 📦 Installation & Setup
 
-### 🔐 Auth Routes
+### 1️⃣ Clone the Repository
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | /api/auth/register | Register user |
-| POST | /api/auth/login | Login and receive JWT |
 
-### 👥 User Routes (Protected)
+git clone https://github.com/your-username/secureuser-auth-api.git
 
-| Method | Endpoint | Access |
-|--------|----------|--------|
-| GET | /api/users | Admin only |
-| GET | /api/users/:id | Admin or Owner |
-| DELETE | /api/users/:id | Admin only |
+cd secureuser-auth-api
 
----
 
-## ⚙️ Installation
+### 2️⃣ Install Dependencies
 
-```bash
-git clone https://github.com/monishabharadwaj/UserManagementNodeAPI.git
-cd UserManagementNodeAPI
+
 npm install
-🔧 Environment Variables
 
-Create a .env file:
+
+### 3️⃣ Configure Environment Variables
+
+Create a `.env` file:
 
 
 PORT=8084
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=yourpassword
-DB_NAME=usermanagement
-JWT_SECRET=your_secret_key
-JWT_EXPIRES_IN=1d
-NODE_ENV=development
+DB_NAME=yourdatabase
 
-▶️ Run Server
+JWT_ACCESS_SECRET=your_access_secret
+JWT_REFRESH_SECRET=your_refresh_secret
+
+
+### 4️⃣ Run the Server
+
 
 npm start
 
@@ -128,32 +116,70 @@ Server runs at:
 
 http://localhost:8084
 
-```
 
-## 🛡 Security Measures Implemented
+---
 
-Password hashing with bcrypt
+## 📖 API Documentation
 
-Strong password validation
+Swagger documentation available at:
 
-JWT token-based authentication
 
-Role-based access control
+http://localhost:8084/api-docs
 
-Rate limiting on login routes
 
-Environment variable protection
+---
 
-## 🔮 Future Improvements
+## 🧪 Running Tests
 
-Refresh token implementation
+Integration tests are implemented using Jest and Supertest.
 
-Account lock after failed attempts
+To run tests:
 
-Swagger API documentation
 
-Unit & integration testing (Jest)
+npm test
 
-Deployment to cloud platform
 
-CI/CD pipeline
+Tests cover:
+
+- User registration
+- Login authentication
+- Protected route access
+- Token-based authorization
+
+---
+
+## 🔒 Security Implementations
+
+- Password hashing with bcrypt
+- JWT token rotation
+- Secure logout
+- Rate limiting against brute-force attacks
+- Account lockout after multiple failed login attempts
+- Helmet for HTTP security headers
+- Input validation with express-validator
+
+---
+
+## 📊 Database Design
+
+Relational schema includes:
+
+- Users
+- Address
+- Geo
+- Company
+
+Structured with proper foreign key relationships.
+
+---
+
+## 🚀 Future Enhancements
+
+- Docker containerization
+- CI/CD pipeline (GitHub Actions)
+- Production deployment (AWS / Render / Railway)
+- Centralized logging (Winston)
+- Unit test coverage reporting
+- Environment-based configuration
+
+---
