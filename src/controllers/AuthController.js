@@ -1,10 +1,10 @@
 const bcrypt = require('bcryptjs');
 const userService = require('../services/UserService');
-const { generateToken } = require('../utils/jwt');
+const { generateAccessToken, generateRefreshToken } = require('../utils/jwt');
+const jwt = require('jsonwebtoken');
 
 class AuthController {
 
-    // 🔐 REGISTER
     async register(req, res) {
         try {
             const { password } = req.body;
@@ -13,20 +13,21 @@ class AuthController {
 
             if (!passwordRegex.test(password)) {
                 return res.status(400).json({
-                    message:
-                        "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character."
+                    message: "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character."
                 });
             }
 
             const user = await userService.createUser(req.body);
 
-            // Set role from request body or default to 'admin' for now
-            const role = req.body.role || 'admin';
-            const token = generateToken({ ...user, role });
+            const accessToken = generateAccessToken(user);
+            const refreshToken = generateRefreshToken(user);
+
+            await userService.updateRefreshToken(user.id, refreshToken);
 
             res.status(201).json({
                 message: "User registered successfully",
-                token,
+                accessToken,
+                refreshToken,
                 user
             });
 
@@ -35,7 +36,6 @@ class AuthController {
         }
     }
 
-    // 🔐 LOGIN
     async login(req, res) {
         try {
             const { email, password } = req.body;
@@ -56,20 +56,67 @@ class AuthController {
                 return res.status(401).json({ message: "Invalid credentials" });
             }
 
-            // 🔐 Remove password
             delete user.password;
 
-            // Ensure role is present in token payload (default admin for now)
-            user.role = user.role || 'admin';
+            const accessToken = generateAccessToken(user);
+            const refreshToken = generateRefreshToken(user);
 
-            // 🔐 Generate token
-            const token = generateToken(user);
+            await userService.updateRefreshToken(user.id, refreshToken);
 
             res.json({
                 message: "Login successful",
-                token,
+                accessToken,
+                refreshToken,
                 user
             });
+
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+    async refresh(req, res) {
+        try {
+            const { refreshToken } = req.body;
+
+            if (!refreshToken) {
+                return res.status(401).json({ message: "Refresh token required" });
+            }
+
+            const user = await userService.getUserByRefreshToken(refreshToken);
+
+            if (!user) {
+                return res.status(403).json({ message: "Invalid refresh token" });
+            }
+
+            jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+
+            const newAccessToken = generateAccessToken(user);
+            const newRefreshToken = generateRefreshToken(user);
+
+            await userService.updateRefreshToken(user.id, newRefreshToken);
+
+            res.json({
+                accessToken: newAccessToken,
+                refreshToken: newRefreshToken
+            });
+
+        } catch (error) {
+            res.status(403).json({ message: "Invalid or expired refresh token" });
+        }
+    }
+
+    async logout(req, res) {
+        try {
+            const { refreshToken } = req.body;
+
+            if (!refreshToken) {
+                return res.status(400).json({ message: "Refresh token required" });
+            }
+
+            await userService.removeRefreshToken(refreshToken);
+
+            res.json({ message: "Logged out successfully" });
 
         } catch (error) {
             res.status(500).json({ message: error.message });

@@ -1,19 +1,24 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
-const SECRET = process.env.JWT_SECRET || 'change_this_in_production';
+// 🔐 Access Token (Short lived)
+const generateAccessToken = (user) => {
+    return jwt.sign(
+        { id: user.id, role: user.role },
+        process.env.JWT_SECRET,
+        { expiresIn: "15m" }
+    );
+};
 
-function generateToken(user) {
-  // Include role so RBAC checks work
-  const payload = {
-    id: user.id,
-    username: user.username,
-    role: user.role,
-  };
-  return jwt.sign(payload, SECRET, { expiresIn: '7d' });
-}
+// 🔐 Refresh Token (Long lived)
+const generateRefreshToken = (user) => {
+    return jwt.sign(
+        { id: user.id },
+        process.env.JWT_REFRESH_SECRET,
+        { expiresIn: "7d" }
+    );
+};
 
-function verifyToken(token) {
-  return jwt.verify(token, SECRET);
-}
-
-module.exports = { generateToken, verifyToken };
+module.exports = {
+    generateAccessToken,
+    generateRefreshToken
+};
