@@ -184,3 +184,17 @@ Structured with proper foreign key relationships.
 - Environment-based configuration
 
 ---
+## 🎨 Frontend (Portfolio Full-Stack Layer)
+
+A clean React + Vite frontend has been added in `frontend/` to showcase a full-stack production flow.
+
+Highlights:
+- Login + Register pages
+- In-memory access token handling
+- Refresh token persistence + rotation flow
+- Axios interceptor-based silent token refresh
+- Protected dashboard route
+- Admin-only user list display
+- Logout with refresh-token invalidation
+
+See `frontend/README.md` for setup and architecture details.

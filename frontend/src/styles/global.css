@@ -1,0 +1,148 @@
+:root {
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  color: #14213d;
+  background: #f5f7fb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.auth-wrapper,
+.dashboard-wrapper {
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.auth-wrapper {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(120deg, #e8efff, #f8fafd);
+}
+
+.auth-card,
+.dashboard-panel {
+  background: #ffffff;
+  border: 1px solid #e6e9f1;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(20, 33, 61, 0.08);
+}
+
+.auth-card {
+  width: min(420px, 100%);
+  padding: 24px;
+}
+
+.auth-card h1 {
+  margin-bottom: 4px;
+}
+
+.auth-card p {
+  color: #4a5773;
+}
+
+.form-grid {
+  margin-top: 18px;
+  display: grid;
+  gap: 14px;
+}
+
+label {
+  display: grid;
+  gap: 6px;
+  font-weight: 600;
+  color: #1f2f56;
+}
+
+input,
+select,
+button {
+  border-radius: 8px;
+  border: 1px solid #cfd8ea;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+}
+
+button {
+  cursor: pointer;
+  border: 0;
+  background: #2563eb;
+  color: #fff;
+  font-weight: 600;
+}
+
+button:disabled {
+  opacity: 0.7;
+}
+
+.auth-footer {
+  margin-top: 14px;
+  font-size: 0.92rem;
+}
+
+.dashboard-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  gap: 18px;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.dashboard-panel {
+  padding: 18px;
+}
+
+.user-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.user-list li {
+  border: 1px solid #e6e9f1;
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.badge {
+  background: #eaf1ff;
+  border-radius: 999px;
+  padding: 2px 10px;
+  color: #1f4bb8;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.error-text {
+  color: #c62828;
+  margin: 0;
+}
+
+.success-text {
+  color: #1b8f47;
+  margin: 0;
+}
+
+.centered-card {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+.logout-btn {
+  background: #0f172a;
+}
